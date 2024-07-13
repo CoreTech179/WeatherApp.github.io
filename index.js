@@ -59,6 +59,9 @@ citySearch.addEventListener('submit',(event)=>{
     getWeatherData();
 });
 
+const changeKelvinToDegree = (kelvin)=>{
+    return (kelvin - 273);
+};
 
 
 // Whenever we are dealing with api we need to make our function asyn function
@@ -80,13 +83,32 @@ const getWeatherData = async () => {
         weatherForecast.innerHTML = `${weather[0].main}`;
         weatherIcon.innerHTML = `<img src="http://openweathermap.org/img/wn/${weather[0].icon}@2x.png"/>`;
 
-        weatherTemperature.innerHTML = `${main.temp}&#8490`;
-        weatherMin.innerHTML = `Min: ${main.temp_min.toFixed()}&#8490`;
-        weatherMax.innerHTML = `Max: ${main.temp_max.toFixed()}&#8490`;
+        // Converting Kelvin to degree celcius
+        let kelvinData = main.temp;
+
+        let celciusData = changeKelvinToDegree(kelvinData);
+        
+        weatherTemperature.innerHTML = `${celciusData.toFixed(1)}&#176C`;
+
+        // Converting Kelvin to degree celcius
+        let minKelvinTemp = main.temp_min;
+        let maxKelvinTemp = main.temp_max;
+
+        let minDegreeTemp = changeKelvinToDegree(minKelvinTemp);
+        let maxDegreeTemp = changeKelvinToDegree(maxKelvinTemp);
+
+        
+        weatherMin.innerHTML = `Min: ${minDegreeTemp.toFixed()}&#176C`;
+        weatherMax.innerHTML = `Max: ${maxDegreeTemp.toFixed()}&#176C`;
 
 
         // getting third part
-        feelsLike.innerHTML = `${main.feels_like}&#8490`;
+
+        // Converting Kelvin to degree celcius
+        let kelvinFeelsLike = main.feels_like;
+        let degreeFeelsLike = changeKelvinToDegree(kelvinFeelsLike);
+        
+        feelsLike.innerHTML = `${degreeFeelsLike.toFixed()}&#176C`;
         weatherWind.innerHTML = `${wind.speed} m/s`;
         weatherHumidity.innerHTML = `${main.humidity} %`;
         weatherPressure.innerHTML = `${main.pressure} hpa`;
